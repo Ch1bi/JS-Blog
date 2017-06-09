@@ -1,36 +1,40 @@
-var express = require("express");
-var mongoose = require("mongoose");
-var bodyParser = require("body-parser");
-var bcrypt = require("bcrypt-nodejs");
-var hbs = require("hbs");
-var path = require("path");
-var session = require("express-session");
-var routes = require("./app/routes/routes");
+var express = require("express"),
+    bodyParser = require("body-parser"),
+    hbs = require("hbs"),
+    path = require("path"),
+    session = require("express-session"),
+    mongoose = require("mongoose"),
+    passport = require("passport"),
+    methodOverride = require("method-override"),
+    auth = require("./app/auth/passport-local"),
+    routes = require("./app/routes/routes"),
+    app = express();
 
-var app = express();
 
-
-app.set("view engine", "hbs");
-app.set("views", path.join(__dirname, "app/views"));
-
-routes(app);
-app.use("/static", path.join(__dirname, "app/client"));
-
-app.use(session({
-
-    secret:"itsASecret",
-    resave:true,
-    saveUninitialized:true
-}));
+app.use("/static", express.static(path.join(__dirname, "app/client")));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
-
     extended: true
-    
 }));
 
-app.listen(function(){
+app.use(session({
+    secret: "itsAMeMario",
+    resave: true,
+    saveUninitialized: true
+}));
 
-    console.log("Listening on port 8080");
-});
+app.use(methodOverride('_method'));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.set("views", path.join(__dirname, "app/views"));
+app.set("view engine", "hbs");
+
+auth(passport);
+routes(app, passport);
+
+mongoose.connect("mongodb://localhost/blog");
+app.listen(8080);
+console.log("Blog is Running");

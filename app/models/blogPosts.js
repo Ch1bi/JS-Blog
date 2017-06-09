@@ -1,28 +1,20 @@
 var mongoose = require("mongoose");
 
-var Post = new mongoose.Schema({
-
-
+var blogPost = new mongoose.Schema({
     title: String,
-
+    post: String,
     date: {
-
         month: String,
         day: String,
         year: String
-    }, 
-
-    body: String,
-    author: String,
-
-//ToDo: add comments if time permits
-    Comments:[
-            {
-
+    },
+    user: String,
+    comments: [
+        {
             comment: String,
             user: String
         }
     ]
 });
 
-module.exports.model("post", Post);
+module.exports = mongoose.model("posts", blogPost);

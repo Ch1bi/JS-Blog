@@ -1,5 +1,5 @@
 var auth = require("../../auth/local-signup");
-var Post = require("../../model/blogPost");
+var Post = require("../../models/blogPosts");
 
 var pages = {
 

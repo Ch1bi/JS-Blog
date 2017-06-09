@@ -1,5 +1,5 @@
 var bcrypt = require("bcrypt-nodejs");
-var User = require("../models/userModel");
+var User = require("../models/user");
 
 module.exports = function(user, callback){  
 
